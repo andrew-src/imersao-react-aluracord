@@ -12,5 +12,3 @@ Foram usadas as Tecnologias:
 
 Você pode acessar o projeto completo através desse link: 
 https://aluracord-eoandrw.vercel.app/
-
-Deployment via github pages: https://eoandrw.github.io/ImersaoDev-Certificard/

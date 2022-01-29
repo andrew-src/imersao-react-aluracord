@@ -10,5 +10,5 @@ Foram usadas as Tecnologias:
 
 ## Deploy on Vercel
 
-Você pode visitar e testar o projeto completo através desse link: 
+Você pode visitar o projeto completo através desse link: 
 https://aluracord-eoandrw.vercel.app/

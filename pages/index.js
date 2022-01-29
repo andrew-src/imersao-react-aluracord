@@ -44,7 +44,7 @@ export default function PaginaInicial() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           backgroundColor: appConfig.theme.colors.primary[500],
           backgroundImage: 'url(https://images8.alphacoders.com/110/1103710.jpg)',
-          backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'hard-light', //darken é maneiro B)
+          backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'normal', //'darken' e 'hard-light' são interessantes :o
         }}
       >
         <Box

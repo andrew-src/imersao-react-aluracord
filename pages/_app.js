@@ -1,3 +1,6 @@
+import appConfig from '../config.json';
+import Head from 'next/head';
+
 function GlobalStyle() {
   return (
       <style global jsx>{`
@@ -31,8 +34,13 @@ export default function CustomApp({ Component, pageProps }) {
   console.log('Está vivo!');
   return (
       <>
-          <GlobalStyle />
-          <Component {...pageProps} />
+        <Head>
+          <meta charSet="utf-8" />
+          <link rel="icon" href="https://starwarsblog.starwars.com/wp-content/uploads/2020/01/Emoji-Blitz-Star-Wars-the-Mandalorian-single.png" />
+          <title>Mandocord</title>
+        </Head>
+        <GlobalStyle />
+        <Component {...pageProps} />
       </>
   );
 }

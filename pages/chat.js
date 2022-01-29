@@ -1,5 +1,6 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
+import { useState } from 'react';
 import appConfig from '../config.json';
 import { useRouter } from 'next/router'; 
 import { createClient } from '@supabase/supabase-js';
@@ -21,9 +22,15 @@ function escutaMensagensEmTempoReal(adicionaMensagem) {
 
 export default function ChatPage() {
     const roteamento = useRouter();
+
+    const {username} = roteamento.query;
+
     const usuarioLogado = roteamento.query.username;
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    
+    // useState para o loading
+    const [loading, setLoading] = useState(true)
 
     React.useEffect(() => {
         supabaseClient
@@ -33,6 +40,7 @@ export default function ChatPage() {
             .then(({ data }) => {
                 // console.log('Dados da consulta:', data);
                 setListaDeMensagens(data);
+                setLoading(false);
             });
 
         const subscription = escutaMensagensEmTempoReal((novaMensagem) => {
@@ -98,8 +106,9 @@ export default function ChatPage() {
         <Box
             styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: appConfig.theme.colors.primary[500],
-                backgroundImage: `url(https://wallpaperaccess.com/full/3053366.png)`,
+                backgroundColor: appConfig.theme.colors.primary[0],
+                backgroundImage: `url(https://images8.alphacoders.com/110/1103710.jpg)`,
+                //https://wallpaperaccess.com/full/3053366.png
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'darken',
                 color: appConfig.theme.colors.neutrals['000']
             }}
@@ -118,7 +127,7 @@ export default function ChatPage() {
                     padding: '32px',
                 }}
             >
-                <Header />
+                <Header user={username}/>
                 <Box
                     styleSheet={{
                         position: 'relative',
@@ -131,7 +140,6 @@ export default function ChatPage() {
                         padding: '16px',
                     }}
                 >
-                    <MessageList mensagens={listaDeMensagens} />
                     {/* {listaDeMensagens.map((mensagemAtual) => {
                         return (
                             <li key={mensagemAtual.id}>
@@ -139,6 +147,31 @@ export default function ChatPage() {
                             </li>
                         )
                     })} */}
+                {loading ? 
+                    <Box
+                        styleSheet={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '80%',
+                            marginBottom: '4rem',
+                        }}
+                    >
+                        <Image 
+                            styleSheet={{
+                              opacity: '.5',                              
+                            }}
+                            src={'https://media4.giphy.com/media/dBexYr4s5qeJ2Jsdcj/giphy.gif'}
+                        />
+                    </Box>
+                    :
+                    <MessageList 
+                        mensagens={listaDeMensagens}
+                        setMensagens={setListaDeMensagens} 
+                        user={username} 
+                        supabaseClient={supabaseClient} 
+                    />
+                } 
                     <Box
                         as="form"
                         styleSheet={{
@@ -155,7 +188,9 @@ export default function ChatPage() {
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
                                     event.preventDefault();
-                                    handleNovaMensagem(mensagem);
+                                    if (mensagem.length >= 1) {
+                                        handleNovaMensagem(mensagem);
+                                    }
                                 }
                             }}
                             placeholder="Insira sua mensagem aqui..."
@@ -172,6 +207,31 @@ export default function ChatPage() {
                             }}
                         />
                         {/* CallBack */}
+                        <Button
+                        disabled={!mensagem}
+                        onClick={() => {
+                            if(mensagem.trim() !== '') handleNovaMensagem(mensagem)
+                            else setMensagem('');
+                        }}
+                        iconName="paperPlane"
+                        rounded="none"
+                        buttonColors={{
+                            contrastColor: `${appConfig.theme.colors.primary[550]}`,
+                            mainColor: `${appConfig.theme.colors.neutrals[800]}`,
+                            mainColorLight: `${appConfig.theme.colors.neutrals[600]}`,
+                            mainColorStrong: `${appConfig.theme.colors.neutrals[900]}`
+                        }}
+                        styleSheet={{
+                            borderRadius: '50%',
+                            padding: '0 3px 0 0',
+                            minWidth: '50px',
+                            minHeight: '50px',
+                            fontSize: '20px',
+                            margin: '0 8px',
+                            lineHeight: '0',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                        />
                         <ButtonSendSticker 
                             onStickerClick={(sticker) => {
                                 console.log('[USANDO O COMPONENTE] Salva esse sticker no banco', sticker);
@@ -190,10 +250,10 @@ function Header() {
         <>
             <Box styleSheet={{ width: '100%', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} >
                 <Text variant='heading5'>
-                    Chat
+                    Mandocord - Chat
                 </Text>
                 <Button
-                    variant='tertiary'
+                    variant='secondary'
                     colorVariant='neutral'
                     label='Logout'
                     href="/"
@@ -259,7 +319,7 @@ function MessageList(props) {
                                 }}
                                 tag="span"
                             >
-                                {(new Date().toLocaleDateString())}
+                                {new Date(mensagem.created_at).toLocaleString('pt-BR', {dateStyle: 'short',timeStyle: 'short'})}
                             </Text>
                         </Box>
                         {/* [Declarativo] */}
@@ -267,8 +327,8 @@ function MessageList(props) {
                         {mensagem.texto.startsWith(':sticker') 
                         ? (
                             <Image src={mensagem.texto.replace(':sticker:', '')} 
-                            height='100px'
-                            width= '100px'
+                            height='150px'
+                            width= '150px'
                             src={mensagem.texto.replace(':sticker:', '')}
                             />
                         )

@@ -1,5 +1,5 @@
 ## Imersão React ⚛️  
-🗨️ Chat Discord desenvolvido durante a Imersão React da Alura com o Instrutor Mario Souto (@omariosouto) e CEO da Alura Paulo Silveira (paulosilveira).
+🗨️ Chat Discord desenvolvido durante a Imersão React da Alura com o Instrutor Mario Souto (@omariosouto) e CEO da Alura Paulo Silveira (paulosilveira/peas).
 
 Foram usadas as Tecnologias:
 - JavaScript
@@ -10,5 +10,5 @@ Foram usadas as Tecnologias:
 
 ## Deploy on Vercel
 
-Você pode acessar o projeto completo através desse link: 
+Você pode visitar o projeto completo através desse link: 
 https://aluracord-eoandrw.vercel.app/
